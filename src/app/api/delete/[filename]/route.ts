@@ -4,10 +4,10 @@ import { join } from "path";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { filename: string } }
+  context: { params: Promise<{ filename: string }> }
 ) {
   try {
-    const { filename } = params;
+    const { filename } = await context.params;
     const filePath = join(process.cwd(), "public/assets", filename);
 
     await unlink(filePath);
