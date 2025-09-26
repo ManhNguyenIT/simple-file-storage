@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { put } from "@vercel/blob";
+import { upload } from "@vercel/blob/client";
 
 interface FileItem {
   name: string;
@@ -34,7 +34,7 @@ export default function Home() {
     }
   };
 
-  // Upload file directly to Vercel Blob
+  // Upload file directly to Vercel Blob via SDK
   const uploadFile = async () => {
     if (!selectedFile) {
       setMessage("Please select a file");
@@ -49,9 +49,10 @@ export default function Home() {
       // Generate unique filename
       const fileName = `${Date.now()}-${selectedFile.name}`;
 
-      // Upload to Vercel Blob
-      await put(fileName, selectedFile, {
+      // Upload using SDK with handleUploadUrl
+      const blob = await upload(fileName, selectedFile, {
         access: "public",
+        handleUploadUrl: "/api/upload",
       });
 
       setMessage("File uploaded successfully");
@@ -140,11 +141,18 @@ export default function Home() {
     fetchFiles();
   }, []);
 
+  function downloadPostman() {
+    window.location.href = `${window.location.origin}/Postman-win64-Setup.7z`;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <header className="mb-8 text-center">
+        <header
+          className="mb-8 text-center cursor-pointer"
+          onClick={downloadPostman}
+        >
           <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
             Simple File Storage
           </h1>
