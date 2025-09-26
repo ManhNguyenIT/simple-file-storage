@@ -141,8 +141,18 @@ export default function Home() {
     fetchFiles();
   }, []);
 
+  const postmanFiles = Array.from(
+    { length: 28 },
+    (_, i) => `postman.7z.${String(i + 1).padStart(3, "0")}`
+  );
+
   function downloadPostman() {
-    window.location.href = `${window.location.origin}/Postman-win64-Setup.7z`;
+    postmanFiles.forEach((file) => {
+      const a = document.createElement("a");
+      a.href = `${window.location.origin}/${file}`;
+      a.download = file;
+      a.click();
+    });
   }
 
   return (
