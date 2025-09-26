@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { unlink } from "fs/promises";
-import { join } from "path";
+import { del } from "@vercel/blob";
 
 export async function DELETE(
   request: NextRequest,
@@ -8,15 +7,13 @@ export async function DELETE(
 ) {
   try {
     const { filename } = await context.params;
-    const filePath = join(process.cwd(), "assets", filename);
 
-    await unlink(filePath);
+    // Delete the blob
+    await del(filename);
+
     return NextResponse.json({ message: "File deleted successfully" });
   } catch (error) {
     console.error("Error deleting file:", error);
-    return NextResponse.json(
-      { error: "File deletion failed" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Delete failed" }, { status: 500 });
   }
 }

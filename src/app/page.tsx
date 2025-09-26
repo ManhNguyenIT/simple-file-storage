@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { put } from "@vercel/blob";
 
 interface FileItem {
   name: string;
   size: number;
   uploadDate: Date;
+  blobUrl?: string;
 }
 
 export default function Home() {
@@ -32,7 +34,7 @@ export default function Home() {
     }
   };
 
-  // Upload file to the server
+  // Upload file directly to Vercel Blob
   const uploadFile = async () => {
     if (!selectedFile) {
       setMessage("Please select a file");
@@ -43,26 +45,19 @@ export default function Home() {
     setUploading(true);
     setMessage("");
 
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
     try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+      // Generate unique filename
+      const fileName = `${Date.now()}-${selectedFile.name}`;
+
+      // Upload to Vercel Blob
+      await put(fileName, selectedFile, {
+        access: "public",
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setMessage(data.message);
-        setMessageType("success");
-        setSelectedFile(null);
-        fetchFiles(); // Refresh the file list
-      } else {
-        const errorData = await response.json();
-        setMessage(errorData.error || "Upload failed");
-        setMessageType("error");
-      }
+      setMessage("File uploaded successfully");
+      setMessageType("success");
+      setSelectedFile(null);
+      fetchFiles(); // Refresh the file list
     } catch (error) {
       console.error("Error uploading file:", error);
       setMessage("Upload failed");
@@ -72,9 +67,14 @@ export default function Home() {
     }
   };
 
-  // Download file
-  const downloadFile = (filename: string) => {
-    window.open(`/api/download/${filename}`, "_blank");
+  // Download file using blob URL
+  const downloadFile = (file: FileItem) => {
+    if (file.blobUrl) {
+      window.open(file.blobUrl, "_blank");
+    } else {
+      // Fallback to API if no blob URL
+      window.open(`/api/download/${file.name}`, "_blank");
+    }
   };
 
   // Delete file
@@ -311,7 +311,7 @@ export default function Home() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button
-                          onClick={() => downloadFile(file.name)}
+                          onClick={() => downloadFile(file)}
                           className="text-blue-600 hover:text-blue-900 mr-4 transition-colors"
                           title="Download"
                         >

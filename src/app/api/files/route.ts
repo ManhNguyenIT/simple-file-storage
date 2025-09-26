@@ -1,24 +1,16 @@
 import { NextResponse } from "next/server";
-import { readdir, stat, mkdir } from "fs/promises";
-import { join } from "path";
+import { list } from "@vercel/blob";
 
 export async function GET() {
   try {
-    const assetsDir = join(process.cwd(), "assets");
-    await mkdir(assetsDir, { recursive: true });
-    const files = await readdir(assetsDir);
+    const { blobs } = await list();
 
-    const fileList = await Promise.all(
-      files.map(async (file) => {
-        const filePath = join(assetsDir, file);
-        const fileStats = await stat(filePath);
-        return {
-          name: file,
-          size: fileStats.size,
-          uploadDate: fileStats.birthtime,
-        };
-      })
-    );
+    const fileList = blobs.map((blob) => ({
+      name: blob.pathname,
+      size: blob.size,
+      uploadDate: new Date(blob.uploadedAt),
+      blobUrl: blob.url,
+    }));
 
     return NextResponse.json(fileList);
   } catch (error) {
