@@ -7,7 +7,7 @@ This project is built using Next.js, a React-based framework for server-side ren
 ## Key technical decisions
 
 - Using Next.js API routes for file operations
-- Storing files in the `public/assets/` directory for easy access
+- Storing files in the `assets/` directory for easy access
 - Implementing server-side file handling to ensure security and proper file management
 - Using TypeScript for type safety and better development experience
 

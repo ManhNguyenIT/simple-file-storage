@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { filename } = await context.params;
-    const filePath = join(process.cwd(), "public/assets", filename);
+    const filePath = join(process.cwd(), "assets", filename);
 
     const fileBuffer = await readFile(filePath);
 

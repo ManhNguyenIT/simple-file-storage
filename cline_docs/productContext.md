@@ -14,7 +14,7 @@ This project is a simple file storage server built with Next.js. It provides a s
 ## How it should work
 
 1. Users can upload files through a web form
-2. Files are stored in the `public/assets/` directory
+2. Files are stored in the `assets/` directory
 3. Users can view a list of all uploaded files
 4. Users can download files by clicking on them
 5. The system provides API endpoints for file operations

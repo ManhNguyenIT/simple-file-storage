@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     // Generate a unique filename to avoid overwrites
     const fileName = `${Date.now()}-${file.name}`;
-    const path = join(process.cwd(), "public/assets", fileName);
+    const path = join(process.cwd(), "assets", fileName);
 
     await writeFile(path, buffer);
     return NextResponse.json({

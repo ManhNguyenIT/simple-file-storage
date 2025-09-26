@@ -16,7 +16,7 @@
 
 ## Technical constraints
 
-- Files are stored in the `public/assets/` directory
+- Files are stored in the `assets/` directory
 - Server-side file handling for security
 - Type-safe API routes using TypeScript
 - Client-side React components for the UI

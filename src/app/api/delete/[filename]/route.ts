@@ -8,7 +8,7 @@ export async function DELETE(
 ) {
   try {
     const { filename } = await context.params;
-    const filePath = join(process.cwd(), "public/assets", filename);
+    const filePath = join(process.cwd(), "assets", filename);
 
     await unlink(filePath);
     return NextResponse.json({ message: "File deleted successfully" });

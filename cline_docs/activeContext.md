@@ -17,6 +17,6 @@ Currently implementing a simple file storage server using Next.js. The main feat
 
 1. Set up the necessary API routes for file operations
 2. Create the user interface components
-3. Implement file upload to the `public/assets/` directory
+3. Implement file upload to the `assets/` directory
 4. Add file listing functionality
 5. Implement file download capability
